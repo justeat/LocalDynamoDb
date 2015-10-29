@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-[assembly: AssemblyVersionAttribute("0.1")]
+
 namespace LocalDynamoDb
 {
     public class LocalDynamo
