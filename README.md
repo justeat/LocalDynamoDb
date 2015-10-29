@@ -29,3 +29,11 @@ The local dynamo will start on the port specified in the constructor, or will de
 
 ##Using the Local Dynamo
 The instance of LocalDynamo will have a property called Client, which is a DynamoDb client that is pointed at the correct url.
+
+If you wish to create your own client, you will have to set the ServiceURL of the client to point at your local dynamo.
+
+``` csharp
+var config = new AmazonDynamoDBConfig { ServiceURL = String.Format("http://localhost:8000"};
+var credentials = new BasicAWSCredentials("CREDS");
+var client = new AmazonDynamoDBClient(credentials, config);
+```
