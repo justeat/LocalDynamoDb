@@ -3,16 +3,24 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Amazon.DynamoDBv2;
+using Amazon.Runtime;
 
 namespace LocalDynamoDb
 {
     public class LocalDynamo
     {
         private Process Dynamo { get; set; }
+        public AmazonDynamoDBClient Client { get; private set; }
+
 
         public LocalDynamo(int portNumber = 8000)
         {
             Dynamo = Create(portNumber);
+            
+            var config = new AmazonDynamoDBConfig { ServiceURL = String.Format("http://localhost:{0}", portNumber) };
+            var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
+            Client = new AmazonDynamoDBClient(credentials, config);
         }
 
         private Process Create(int portNumber)

@@ -14,18 +14,14 @@ namespace LocalDynamoDb.Test
         [Test]
         public void FullIntegrationTest()
         {
-            var config = new AmazonDynamoDBConfig { ServiceURL = "http://localhost:8001" };
-            var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
-            var client = new AmazonDynamoDBClient(credentials, config);
-
             var localDynamo = new LocalDynamo(8001);
 
             try
             {
                 localDynamo.Start();
-                CreateTestTable(client);
+                CreateTestTable(localDynamo.Client);
 
-                var tables = client.ListTables();
+                var tables = localDynamo.Client.ListTables();
                 Assert.AreEqual(tables.TableNames.Count, 1,
                     "Wrong number of tables.  Expected 1 but got " + tables.TableNames.Count);
             }
