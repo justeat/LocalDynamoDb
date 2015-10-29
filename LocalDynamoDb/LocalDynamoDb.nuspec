@@ -8,7 +8,7 @@
     <owners>$author$</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotesInitial release.</releaseNotes>
+    <releaseNotes>Initial release.</releaseNotes>
     <copyright>Copyright 2015</copyright>
   </metadata>
 </package>
