@@ -10,12 +10,12 @@ namespace LocalDynamoDb
     {
         private Process Dynamo { get; set; }
 
-        public LocalDynamo()
+        public LocalDynamo(int portNumber = 8000)
         {
-            Dynamo = Create();
+            Dynamo = Create(portNumber);
         }
 
-        private Process Create(int portNumber = 8000)
+        private Process Create(int portNumber)
         {
             var processJar = new Process();
             var arguments = String.Format("-Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -inMemory -port{0}", portNumber);
