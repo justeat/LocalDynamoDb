@@ -5,7 +5,7 @@ It should be downloadable from here - http://docs.aws.amazon.com/amazondynamodb/
 
 ##Getting Started
 
-Jave is required.
+Java is required as Amazon provide DYnamoDb as a jar file.
 
 The DynamoDb.jar isn't included in this nuget to avoid licenseing issues.  
 Add the .jar file to your project in a folder called "dynamodblocal".
@@ -16,7 +16,7 @@ Set the .jar and all of the dependency libraries to copy to the output directory
 To spin up an instance of dynamo
 
 ```csharp
-var localDynamo = new LocalDynamo();
+var localDynamo = new LocalDynamo(8080);
 localDynamo.Start();
 ```
 
@@ -25,13 +25,7 @@ And to stop it
 localDynamo.Stop();
 ```
 
-The local dynamo will start on localhost:8000
+The local dynamo will start on the port specified in the constructir, or will default to 8000 if no port is specified.
 
 ##Using the Local Dynamo
-To have your tests point at your local instance of dynamo you will have to override the ServiceUrl.
-
-```csharp
-var config = new AmazonDynamoDBConfig { ServiceURL = "http://localhost:8000" };
-var credentials = new BasicAWSCredentials("CREDENTIALS");
-var client = new AmazonDynamoDBClient(credentials, config);
-```
+The instance of LocalDynamo will have a property called Client, which is a DynamoDb client that is pointed at the correct url.
