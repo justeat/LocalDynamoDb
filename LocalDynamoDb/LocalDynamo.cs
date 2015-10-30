@@ -10,17 +10,16 @@ namespace LocalDynamoDb
 {
     public class LocalDynamo
     {
+        private int _port;
         private Process Dynamo { get; set; }
         public AmazonDynamoDBClient Client { get; private set; }
 
 
         public LocalDynamo(int portNumber = 8000)
         {
-            Dynamo = Create(portNumber);
-            
-            var config = new AmazonDynamoDBConfig { ServiceURL = String.Format("http://localhost:{0}", portNumber) };
-            var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
-            Client = new AmazonDynamoDBClient(credentials, config);
+            _port = portNumber;
+            Dynamo = Create(_port);
+            Client = CreateClient();
         }
 
         private Process Create(int portNumber)
@@ -55,6 +54,7 @@ namespace LocalDynamoDb
         {
             Console.WriteLine("Starting in memory DynamoDb");
             var success = Dynamo.Start();
+            Client = CreateClient();
             if (!success)
             {
                 throw new Win32Exception("Error starting dynamo: " + Dynamo.StandardError.ReadToEnd());
@@ -73,6 +73,13 @@ namespace LocalDynamoDb
                 Console.WriteLine(Dynamo.StandardError.ReadToEnd());
                 throw;
             }
+        }
+
+        private AmazonDynamoDBClient CreateClient()
+        {
+            var config = new AmazonDynamoDBConfig { ServiceURL = String.Format("http://localhost:{0}", _port) };
+            var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
+            return new AmazonDynamoDBClient(credentials, config);
         }
     }
 }
