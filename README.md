@@ -34,6 +34,6 @@ If you wish to create your own client, you will have to set the ServiceURL of th
 
 ``` csharp
 var config = new AmazonDynamoDBConfig { ServiceURL = String.Format("http://localhost:8000"};
-var credentials = new BasicAWSCredentials("CREDS");
+var credentials = new BasicAWSCredentials("CRED", "ENTIALS");
 var client = new AmazonDynamoDBClient(credentials, config);
 ```
