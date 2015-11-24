@@ -7,9 +7,9 @@ It should be downloadable from here - http://docs.aws.amazon.com/amazondynamodb/
 
 Java is required as Amazon provide the local DynamoDb as a jar file.
 
-The DynamoDb.jar isn't included in this nuget to avoid licenseing issues.  
+The DynamoDb.jar isn't included in this nuget to avoid licensing issues.  
 Add the .jar file to your project in a folder called "dynamodblocal".
-Add is dependency libraries to a subfolder of dynamodblocal called "DynamoDBLocal_lib".
+Add its dependency libraries to a subfolder of dynamodblocal called "DynamoDBLocal_lib".
 
 Set the .jar and all of the dependency libraries to copy to the output directory.
 
