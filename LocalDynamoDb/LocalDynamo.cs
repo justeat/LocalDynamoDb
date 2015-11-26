@@ -35,6 +35,8 @@ namespace LocalDynamoDb
             string absolutePath = Path.GetFullPath(rootFolder + relativePath);
             var jarFilePath = absolutePath + "\\DynamoDBLocal.jar";
 
+            Console.WriteLine("Jar file path - " + jarFilePath);
+
             if (!File.Exists(jarFilePath))
             {
                 throw new FileNotFoundException(
