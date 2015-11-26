@@ -37,6 +37,10 @@ var config = new AmazonDynamoDBConfig { ServiceURL = String.Format("http://local
 var credentials = new BasicAWSCredentials("CRED", "ENTIALS");
 var client = new AmazonDynamoDBClient(credentials, config);
 ```
-## Resharper
+## Gotyas - Resharper
 
 To run the tests through resharper, you will have to go into the options and under unit tests, disable the Shadow Copy option.
+
+## Gotyas - Visual Studio
+
+To be able to start processes you will need to run visual studio in Administrator mode.
