@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("LocalDynamo")]
-[assembly: AssemblyDescription("A wrapper to help with spinning up and tearing down a local instance of DynamoDb.")]
+[assembly: AssemblyDescription("A wrapper to help with spinning up and tearing down a local instance of DynamoDb. Set up instructions here - https://github.com/justeat/LocalDynamoDb")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("JUST EAT Ltd.")]
 [assembly: AssemblyProduct("LocalDynamo")]
