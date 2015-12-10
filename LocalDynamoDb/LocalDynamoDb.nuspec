@@ -10,5 +10,6 @@
     <description>$description$</description>
     <releaseNotes>Initial release.</releaseNotes>
     <copyright>Copyright 2015</copyright>
+	<projectUrl>https://github.com/justeat/LocalDynamoDb</projectUrl>
   </metadata>
 </package>
