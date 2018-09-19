@@ -1,9 +1,9 @@
-#LocalDynamoDb
+# LocalDynamoDb
 
 This nuget provides a wrapper for the DynamoDb.jar that is available from AWS for local deployment. 
 It should be downloadable from here - http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tools.DynamoDBLocal.html
 
-##Getting Started
+## Getting Started
 
 Java is required as Amazon provide the local DynamoDb as a jar file.
 
@@ -27,7 +27,7 @@ localDynamo.Stop();
 
 The local dynamo will start on the port specified in the constructor, or will default to 8000 if no port is specified.
 
-##Using the Local Dynamo
+## Using the Local Dynamo
 The instance of LocalDynamo will have a property called Client, which is a DynamoDb client that is pointed at the correct url.
 
 If you wish to create your own client, you will have to set the ServiceURL of the client to point at your local dynamo.
