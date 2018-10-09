@@ -1,10 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.Runtime;
 
@@ -15,7 +13,6 @@ namespace LocalDynamoDb
         private readonly int _port;
         private Process Dynamo { get; set; }
         public AmazonDynamoDBClient Client { get; private set; }
-
 
         public LocalDynamo(int portNumber = 8000)
         {
@@ -74,7 +71,7 @@ namespace LocalDynamoDb
             {
                 Dynamo.Kill();
             }
-            catch (Win32Exception)
+            catch (Exception)
             {
                 Console.WriteLine(Dynamo.StandardError.ReadToEnd());
                 throw;
