@@ -17,6 +17,7 @@ namespace LocalDynamoDb.Tests
             try
             {
                 localDynamo.Start();
+                await Task.Delay(3000);
                 await CreateTestTable(localDynamo.Client);
 
                 var tables = await localDynamo.Client.ListTablesAsync();

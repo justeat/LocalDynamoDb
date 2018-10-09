@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Amazon.DynamoDBv2;
 using Amazon.Runtime;
@@ -24,15 +25,15 @@ namespace LocalDynamoDb
         private static Process Create(int portNumber)
         {
             var processJar = new Process();
-            var arguments = $"-Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -inMemory -port {portNumber}";
+            var arguments = $"-Djava.library.path=.{Path.DirectorySeparatorChar}DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -inMemory -port {portNumber}";
 
-            processJar.StartInfo.FileName = "\"" + @"java" + "\"";
+            processJar.StartInfo.FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "\"" + @"java" + "\"" : "java";;
             processJar.StartInfo.Arguments = arguments;
 
             var rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var relativePath = "\\dynamodblocal";
-            string absolutePath = Path.GetFullPath(rootFolder + relativePath);
-            var jarFilePath = absolutePath + "\\DynamoDBLocal.jar";
+            var relativePath = Path.DirectorySeparatorChar + "dynamodblocal";
+            var absolutePath = Path.GetFullPath(rootFolder + relativePath).Replace('\\', Path.DirectorySeparatorChar);
+            var jarFilePath = absolutePath + Path.DirectorySeparatorChar + "DynamoDBLocal.jar";
 
             Console.WriteLine("Jar file path - " + jarFilePath);
 
@@ -55,7 +56,6 @@ namespace LocalDynamoDb
         {
             Console.WriteLine("Starting in memory DynamoDb");
             var success = Dynamo.Start();
-            Thread.Sleep(2000);
             
             Client = CreateClient();
             if (!success)

@@ -14,9 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="dynamodblocal\**">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
+        <Content Include="dynamodblocal/**" CopyToOutputDirectory="Always" />
     </ItemGroup>
 
     <ItemGroup>
