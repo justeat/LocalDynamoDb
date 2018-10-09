@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.Runtime;
 
@@ -10,7 +12,7 @@ namespace LocalDynamoDb
 {
     public class LocalDynamo
     {
-        private int _port;
+        private readonly int _port;
         private Process Dynamo { get; set; }
         public AmazonDynamoDBClient Client { get; private set; }
 
@@ -22,10 +24,10 @@ namespace LocalDynamoDb
             Client = CreateClient();
         }
 
-        private Process Create(int portNumber)
+        private static Process Create(int portNumber)
         {
             var processJar = new Process();
-            var arguments = String.Format("-Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -inMemory -port {0}", portNumber);
+            var arguments = $"-Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -inMemory -port {portNumber}";
 
             processJar.StartInfo.FileName = "\"" + @"java" + "\"";
             processJar.StartInfo.Arguments = arguments;
@@ -56,10 +58,12 @@ namespace LocalDynamoDb
         {
             Console.WriteLine("Starting in memory DynamoDb");
             var success = Dynamo.Start();
+            Thread.Sleep(2000);
+            
             Client = CreateClient();
             if (!success)
             {
-                throw new Win32Exception("Error starting dynamo: " + Dynamo.StandardError.ReadToEnd());
+                throw new Exception("Error starting dynamo: " + Dynamo.StandardError.ReadToEnd());
             }
         }
 
@@ -79,7 +83,7 @@ namespace LocalDynamoDb
 
         private AmazonDynamoDBClient CreateClient()
         {
-            var config = new AmazonDynamoDBConfig { ServiceURL = String.Format("http://localhost:{0}", _port) };
+            var config = new AmazonDynamoDBConfig { ServiceURL = $"http://localhost:{_port}"};
             var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
             return new AmazonDynamoDBClient(credentials, config);
         }
