@@ -2,15 +2,25 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+        <AssemblyName>LocalDynamoDb</AssemblyName>
+        <PackageId>LocalDynamoDb</PackageId>
+        <title>LocalDynamoDb</title>
+        <Authors>Just Eat</Authors>
+        <Company>Just Eat</Company>
+        <PackageTags>aws;dynamodb</PackageTags>
+        <RepositoryType>git</RepositoryType>
+        <PackageIconUrl>https://avatars3.githubusercontent.com/u/1516790?s=200</PackageIconUrl>
+        <Description>A wrapper to help with spinning up and tearing down a local instance of DynamoDb</Description>
+        <PackageProjectUrl>https://github.com/justeat/LocalDynamoDb</PackageProjectUrl>
     </PropertyGroup>
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">
-      <PackageReference Include="AWSSDK" Version="2.3.55.2" />
+        <PackageReference Include="AWSSDK" Version="2.3.55.2" />
     </ItemGroup>
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-      <PackageReference Include="AWSSDK.Core" Version="3.3.27" />
-      <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.14.5" />
+        <PackageReference Include="AWSSDK.Core" Version="3.3.27" />
+        <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.14.5" />
     </ItemGroup>
 
 </Project>

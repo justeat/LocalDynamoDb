@@ -20,11 +20,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="dynamodblocal\DynamoDBLocal_lib" />
+        <Folder Include="dynamodblocal\DynamoDBLocal_lib" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LocalDynamoDb\LocalDynamoDb.csproj" />
+        <ProjectReference Include="..\LocalDynamoDb\LocalDynamoDb.csproj" />
     </ItemGroup>
 
 </Project>
