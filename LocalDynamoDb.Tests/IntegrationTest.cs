@@ -1,23 +1,30 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace LocalDynamoDb.Tests
 {
-    public static class IntegrationTest
+    public class IntegrationTest
     {
+        private readonly ITestOutputHelper _outputHelper;
+
+        public IntegrationTest(ITestOutputHelper outputHelper)
+        {
+            _outputHelper = outputHelper;
+        }
+        
         [Fact]
-        public static async Task FullIntegrationTest()
+        public async Task FullIntegrationTest()
         {
             var localDynamo = new LocalDynamo(8001);
 
             try
             {
                 localDynamo.Start();
-                await Task.Delay(3000);
+                await Task.Delay(4000);
                 await CreateTestTable(localDynamo.Client);
 
                 var tables = await localDynamo.Client.ListTablesAsync();
@@ -29,9 +36,9 @@ namespace LocalDynamoDb.Tests
             }
         }
 
-        private static async Task CreateTestTable(IAmazonDynamoDB dynamoClient)
+        private async Task CreateTestTable(IAmazonDynamoDB dynamoClient)
         {
-            Console.WriteLine("Creating tables.");
+            _outputHelper.WriteLine("Creating tables.");
             var request = new CreateTableRequest
             {
                 TableName = "testTable",
@@ -64,7 +71,7 @@ namespace LocalDynamoDb.Tests
             }
             catch (ResourceInUseException)
             {
-                Console.WriteLine("Table already exists.");
+                _outputHelper.WriteLine("Table already exists.");
                 throw;
             }
         }

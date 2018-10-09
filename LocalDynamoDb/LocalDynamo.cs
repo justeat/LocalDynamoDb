@@ -1,11 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
 using Amazon.DynamoDBv2;
 using Amazon.Runtime;
+using static System.FormattableString; 
 
 namespace LocalDynamoDb
 {
@@ -32,20 +33,20 @@ namespace LocalDynamoDb
 
             var rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var relativePath = Path.DirectorySeparatorChar + "dynamodblocal";
-            var absolutePath = Path.GetFullPath(rootFolder + relativePath).Replace('\\', Path.DirectorySeparatorChar);
-            var jarFilePath = absolutePath + Path.DirectorySeparatorChar + "DynamoDBLocal.jar";
+            var osFriendlyAbsPath = Path.GetFullPath(rootFolder + relativePath).Replace('\\', Path.DirectorySeparatorChar);
+            var jarFilePath = Path.Combine(osFriendlyAbsPath, "DynamoDBLocal.jar");
 
             Console.WriteLine("Jar file path - " + jarFilePath);
 
             if (!File.Exists(jarFilePath))
             {
                 throw new FileNotFoundException(
-                    "DynamoDBLocal.jar not found in " + absolutePath +
+                    "DynamoDBLocal.jar not found in " + osFriendlyAbsPath +
                     ". Please review the README.txt for setup instructions.",
                     jarFilePath);
             }
 
-            processJar.StartInfo.WorkingDirectory = absolutePath;
+            processJar.StartInfo.WorkingDirectory = osFriendlyAbsPath;
             processJar.StartInfo.UseShellExecute = false;
             processJar.StartInfo.RedirectStandardOutput = true;
             processJar.StartInfo.RedirectStandardError = true;
@@ -71,7 +72,7 @@ namespace LocalDynamoDb
             {
                 Dynamo.Kill();
             }
-            catch (Exception)
+            catch (Win32Exception)
             {
                 Console.WriteLine(Dynamo.StandardError.ReadToEnd());
                 throw;
@@ -80,7 +81,7 @@ namespace LocalDynamoDb
 
         private AmazonDynamoDBClient CreateClient()
         {
-            var config = new AmazonDynamoDBConfig { ServiceURL = $"http://localhost:{_port}"};
+            var config = new AmazonDynamoDBConfig { ServiceURL = Invariant($"http://localhost:{_port}")};
             var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
             return new AmazonDynamoDBClient(credentials, config);
         }

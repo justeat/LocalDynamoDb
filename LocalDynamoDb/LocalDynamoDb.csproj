@@ -14,7 +14,7 @@
         <PackageProjectUrl>https://github.com/justeat/LocalDynamoDb</PackageProjectUrl>
     </PropertyGroup>
 
-    <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net451'">
         <PackageReference Include="AWSSDK" Version="2.3.55.2" />
     </ItemGroup>
 
