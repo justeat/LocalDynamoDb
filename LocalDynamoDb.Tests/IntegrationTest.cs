@@ -9,11 +9,11 @@ namespace LocalDynamoDb.Tests
 {
     public class IntegrationTest
     {
-        private readonly ITestOutputHelper _outputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public IntegrationTest(ITestOutputHelper outputHelper)
+        public IntegrationTest(ITestOutputHelper output)
         {
-            _outputHelper = outputHelper;
+            _output = output;
         }
         
         [Fact]
@@ -28,7 +28,7 @@ namespace LocalDynamoDb.Tests
                 await CreateTestTable(localDynamo.Client);
 
                 var tables = await localDynamo.Client.ListTablesAsync();
-                Assert.True(tables.TableNames.Count == 1, "Wrong number of tables.  Expected 1 but got " + tables.TableNames.Count);
+                Assert.True(tables.TableNames.Count == 1, "Wrong number of tables. Expected 1 but got " + tables.TableNames.Count);
             }
             finally
             {
@@ -38,7 +38,7 @@ namespace LocalDynamoDb.Tests
 
         private async Task CreateTestTable(IAmazonDynamoDB dynamoClient)
         {
-            _outputHelper.WriteLine("Creating tables.");
+            _output.WriteLine("Creating tables.");
             var request = new CreateTableRequest
             {
                 TableName = "testTable",
@@ -71,7 +71,7 @@ namespace LocalDynamoDb.Tests
             }
             catch (ResourceInUseException)
             {
-                _outputHelper.WriteLine("Table already exists.");
+                _output.WriteLine("Table already exists.");
                 throw;
             }
         }

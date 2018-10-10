@@ -26,7 +26,7 @@ namespace LocalDynamoDb
         private static Process Create(int portNumber)
         {
             var processJar = new Process();
-            var arguments = $"-Djava.library.path=.{Path.DirectorySeparatorChar}DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -inMemory -port {portNumber}";
+            var arguments = $"-Djava.library.path=.{Path.DirectorySeparatorChar}DynamoDBLocal_lib -jar DynamoDBLocal.jar curl -O https://bootstrap.pypa.io/get-pip.py -port {portNumber}";
 
             processJar.StartInfo.FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "\"" + @"java" + "\"" : "java";;
             processJar.StartInfo.Arguments = arguments;
