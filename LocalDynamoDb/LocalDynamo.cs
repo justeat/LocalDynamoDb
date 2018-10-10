@@ -33,20 +33,20 @@ namespace LocalDynamoDb
 
             var rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var relativePath = Path.DirectorySeparatorChar + "dynamodblocal";
-            var osFriendlyAbsPath = Path.GetFullPath(rootFolder + relativePath).Replace('\\', Path.DirectorySeparatorChar);
-            var jarFilePath = Path.Combine(osFriendlyAbsPath, "DynamoDBLocal.jar");
+            var osPathAbsolute = Path.GetFullPath(Path.Combine(rootFolder + relativePath));
+            var jarFilePath = Path.Combine(osPathAbsolute, "DynamoDBLocal.jar");
 
             Console.WriteLine("Jar file path - " + jarFilePath);
 
             if (!File.Exists(jarFilePath))
             {
                 throw new FileNotFoundException(
-                    "DynamoDBLocal.jar not found in " + osFriendlyAbsPath +
+                    "DynamoDBLocal.jar not found in " + osPathAbsolute +
                     ". Please review the README.txt for setup instructions.",
                     jarFilePath);
             }
 
-            processJar.StartInfo.WorkingDirectory = osFriendlyAbsPath;
+            processJar.StartInfo.WorkingDirectory = osPathAbsolute;
             processJar.StartInfo.UseShellExecute = false;
             processJar.StartInfo.RedirectStandardOutput = true;
             processJar.StartInfo.RedirectStandardError = true;
