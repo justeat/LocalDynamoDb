@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Amazon.DynamoDBv2;
-using Amazon.Runtime;
-using static System.FormattableString; 
+using Amazon.Runtime; 
 
 namespace LocalDynamoDb
 {
@@ -81,7 +81,11 @@ namespace LocalDynamoDb
 
         private AmazonDynamoDBClient CreateClient()
         {
-            var config = new AmazonDynamoDBConfig { ServiceURL = Invariant($"http://localhost:{_port}")};
+            var config = new AmazonDynamoDBConfig
+            {
+                ServiceURL = $"http://localhost:{_port.ToString(CultureInfo.InvariantCulture)}"
+            };
+
             var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
             return new AmazonDynamoDBClient(credentials, config);
         }
