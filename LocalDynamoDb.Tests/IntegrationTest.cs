@@ -19,11 +19,12 @@ namespace LocalDynamoDb.Tests
         [Fact]
         public async Task FullIntegrationTest()
         {
-            var localDynamo = new LocalDynamo(8001);
+            LocalDynamo localDynamo = new LocalDynamo("jar path",8001);
 
             try
             {
                 localDynamo.Start();
+                
                 await Task.Delay(4000);
                 await CreateTestTable(localDynamo.Client);
 

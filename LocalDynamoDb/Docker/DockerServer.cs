@@ -1,11 +1,10 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 
-namespace LocalDynamoDb
+namespace LocalDynamoDb.Docker
 {
     public abstract class DockerServer
     {

@@ -6,77 +6,43 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Amazon.DynamoDBv2;
 using Amazon.Runtime;
+using LocalDynamoDb.Docker;
 using static System.FormattableString; 
 
 namespace LocalDynamoDb
 {
-    public class LocalDynamo
+    public interface ILocalDynamoDb
+    {
+        void Start();
+        void Stop();
+    }
+    
+    public class LocalDynamo : ILocalDynamoDb
     {
         private readonly int _port;
+        private DynamoDbContainer _dynamo;
         private Process Dynamo { get; set; }
         public AmazonDynamoDBClient Client { get; private set; }
 
-        public LocalDynamo(int portNumber = 8000)
+        public LocalDynamo(string imageName, string containerName, int portNumber = 8000)
         {
             _port = portNumber;
-            Dynamo = Create(_port);
-            Client = CreateClient();
+            _dynamo = new DynamoDbContainer(imageName, containerName, portNumber);
         }
-
-        private static Process Create(int portNumber)
+        
+        public LocalDynamo(string path, int portNumber = 8000)
         {
-            var processJar = new Process();
-            var arguments = $"-Djava.library.path=.{Path.DirectorySeparatorChar}DynamoDBLocal_lib -jar DynamoDBLocal.jar curl -O https://bootstrap.pypa.io/get-pip.py -port {portNumber}";
-
-            processJar.StartInfo.FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "\"" + @"java" + "\"" : "java";;
-            processJar.StartInfo.Arguments = arguments;
-
-            var rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var relativePath = Path.DirectorySeparatorChar + "dynamodblocal";
-            var osFriendlyAbsPath = Path.GetFullPath(rootFolder + relativePath).Replace('\\', Path.DirectorySeparatorChar);
-            var jarFilePath = Path.Combine(osFriendlyAbsPath, "DynamoDBLocal.jar");
-
-            Console.WriteLine("Jar file path - " + jarFilePath);
-
-            if (!File.Exists(jarFilePath))
-            {
-                throw new FileNotFoundException(
-                    "DynamoDBLocal.jar not found in " + osFriendlyAbsPath +
-                    ". Please review the README.txt for setup instructions.",
-                    jarFilePath);
-            }
-
-            processJar.StartInfo.WorkingDirectory = osFriendlyAbsPath;
-            processJar.StartInfo.UseShellExecute = false;
-            processJar.StartInfo.RedirectStandardOutput = true;
-            processJar.StartInfo.RedirectStandardError = true;
-            return processJar;
+            _port = portNumber;
         }
+        
 
         public void Start()
         {
-            Console.WriteLine("Starting in memory DynamoDb");
-            var success = Dynamo.Start();
-            
-            Client = CreateClient();
-            if (!success)
-            {
-                throw new Exception("Error starting dynamo: " + Dynamo.StandardError.ReadToEnd());
-            }
+            _dynamo.Start();
         }
 
         public void Stop()
         {
-            Console.WriteLine("Stopping in memory DynamoDb");
-            try
-            {
-                Dynamo.Kill();
-            }
-            catch (Win32Exception)
-            {
-                Console.WriteLine(Dynamo.StandardError.ReadToEnd());
-                throw;
-            }
         }
 
         private AmazonDynamoDBClient CreateClient()

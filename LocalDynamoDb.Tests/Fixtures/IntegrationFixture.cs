@@ -1,5 +1,6 @@
 using System;
 using Docker.DotNet;
+using LocalDynamoDb.Docker;
 
 namespace LocalDynamoDb.Tests
 {
@@ -11,7 +12,7 @@ namespace LocalDynamoDb.Tests
         public IntegrationFixture()
         {
             _client = new DockerClientConfiguration(new Uri("unix:///var/run/docker.sock")).CreateClient();
-            _container = new DynamoDbContainer("amazon/dynamodb-local", "je-dynamotest");
+            _container = new DynamoDbContainer("amazon/dynamodb-local", "je-dynamotest", 8001);
         }
 
         public bool Start()

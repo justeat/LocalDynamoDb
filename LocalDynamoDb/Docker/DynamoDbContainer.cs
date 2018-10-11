@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
@@ -8,27 +7,27 @@ using Amazon.DynamoDBv2.Model;
 using Amazon.Runtime;
 using Docker.DotNet.Models;
 
-namespace LocalDynamoDb
+namespace LocalDynamoDb.Docker
 {
     public class DynamoDbContainer : DockerServer
     {
-        public DynamoDbContainer(string imageName, string containerName) : base(imageName, containerName)
+        private readonly int _portNumber;
+
+        public DynamoDbContainer(string imageName, string containerName, int portNumber) : base(imageName, containerName)
         {
+            _portNumber = portNumber;
         }
 
         protected override async Task<bool> IsReady()
         {
             try
             {
-                var config = new AmazonDynamoDBConfig { ServiceURL = $"http://localhost:8000"};
+                var config = new AmazonDynamoDBConfig { ServiceURL = $"http://localhost:{_portNumber}"};
                 var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
                 var client = new AmazonDynamoDBClient(credentials, config);
                 
-                ListTablesResponse t = await client.ListTablesAsync();
-                if (t.HttpStatusCode == HttpStatusCode.OK)
-                    return true;
-                
-                return false;
+                var t = await client.ListTablesAsync();
+                return t.HttpStatusCode == HttpStatusCode.OK;
             }
             catch (Exception e)
             {
@@ -43,12 +42,12 @@ namespace LocalDynamoDb
                 PortBindings = new Dictionary<string, IList<PortBinding>>
                 {
                     {
-                        "8000/tcp",
+                        $"{_portNumber}/tcp",
                         new List<PortBinding>
                         {
                             new PortBinding
                             {
-                                HostPort = $"8000",
+                                HostPort = $"{_portNumber}",
                                 HostIP = "localhost"
                             }
                         }
