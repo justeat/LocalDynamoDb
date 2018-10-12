@@ -1,5 +1,4 @@
 using System;
-using Amazon.DynamoDBv2;
 
 namespace LocalDynamoDb.Builder.Docker
 {
@@ -20,7 +19,7 @@ namespace LocalDynamoDb.Builder.Docker
         IDynamoInstance Build();
     }
     
-    public class DockerBuilder : IIsContainer, ICanCreateClient, IDynamoBuilder
+    public class DockerBuilder : IIsContainer, IDynamoBuilder
     {
         private readonly DockerConfiguration _configuration;
 
@@ -45,11 +44,6 @@ namespace LocalDynamoDb.Builder.Docker
             return this;
         }
 
-        public AmazonDynamoDBClient CreateClient()
-        {
-            return new AmazonDynamoDBClient();
-        }
-
         public IDynamoBuilder ExposePort(int portNumber)
         {
             _configuration.PortNumber = portNumber;
@@ -57,8 +51,6 @@ namespace LocalDynamoDb.Builder.Docker
         }
 
         public IDynamoInstance Build()
-        {
-            return new DynamoDockerInstance(_configuration);
-        }
+            => new DynamoDockerInstance(_configuration);
     }
 }

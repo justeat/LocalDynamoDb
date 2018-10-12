@@ -21,14 +21,16 @@ namespace LocalDynamoDb.Builder.Docker.Internals
         {
             try
             {
-                var config = new AmazonDynamoDBConfig { ServiceURL = $"http://localhost:{_portNumber}"};
+                var config = new AmazonDynamoDBConfig {ServiceURL = $"http://localhost:{_portNumber}"};
                 var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
                 var client = new AmazonDynamoDBClient(credentials, config);
-                
+
                 var t = await client.ListTablesAsync();
-                return t.HttpStatusCode == HttpStatusCode.OK;
+                var result = t.HttpStatusCode == HttpStatusCode.OK;
+
+                return result;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

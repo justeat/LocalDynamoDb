@@ -37,7 +37,7 @@ namespace LocalDynamoDb.Builder.Docker
             try
             {
                 // TODO Perhaps return task and let consumer wait?
-                _container.Start(_dockerClient).Wait(TimeSpan.FromSeconds(10));
+                _container.Start(_dockerClient).Wait(TimeSpan.FromSeconds(30));
             }
             catch (Exception e)
             {
@@ -53,15 +53,12 @@ namespace LocalDynamoDb.Builder.Docker
             await _container.Stop(_dockerClient);
         }
 
-        public IDynamoInstance Build()
+        public AmazonDynamoDBClient CreateClient()
         {
             var config = new AmazonDynamoDBConfig { ServiceURL = $"http://localhost:{_configuration.PortNumber}"};
             var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
             
-            Client = new AmazonDynamoDBClient(credentials, config);
-            return this;
+            return new AmazonDynamoDBClient(credentials, config);
         }
-
-        public AmazonDynamoDBClient Client { get; private set; }
     }
 }

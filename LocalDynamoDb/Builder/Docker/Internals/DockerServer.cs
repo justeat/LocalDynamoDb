@@ -64,7 +64,7 @@ namespace LocalDynamoDb.Builder.Docker.Internals
             var started = await client.Containers.StartContainerAsync(ContainerName, new ContainerStartParameters());
             if (!started)
             {
-                throw new InvalidOperationException($"Container '{ContainerName}' did not start!!!!");
+                throw new InvalidOperationException($"Container '{ContainerName}' did not start!");
             }
 
             var i = 0;
@@ -86,7 +86,7 @@ namespace LocalDynamoDb.Builder.Docker.Internals
                     throw new TimeoutException($"Container {ContainerName} does not seem to be responding in a timely manner");
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                await Task.Delay(TimeSpan.FromSeconds(3));
             }   
         }
 

@@ -1,4 +1,5 @@
 using System;
+using Amazon.DynamoDBv2;
 using LocalDynamoDb.Builder;
 
 namespace LocalDynamoDb.Tests.Fixtures
@@ -9,7 +10,7 @@ namespace LocalDynamoDb.Tests.Fixtures
 
         public DockerTestFixture()
         {
-            var builder = new LocalDynamoDbBuilder().Container().UsingImage("amazon/dynamodb-local").ExposePort(8001);
+            var builder = new LocalDynamoDbBuilder().Container().UsingImage("amazon/dynamodb-local").ExposePort(8000);
             _dynamo = builder.Build();
             _dynamo.Start();
         }
@@ -21,8 +22,9 @@ namespace LocalDynamoDb.Tests.Fixtures
             => _dynamo.Stop();
 
         public void Dispose()
-        {
-            _dynamo.Stop();
-        }
+            => _dynamo.Stop();
+
+        public AmazonDynamoDBClient Client
+            => _dynamo.CreateClient();
     }
 }
