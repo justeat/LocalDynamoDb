@@ -12,15 +12,8 @@ namespace LocalDynamoDb.Tests.Fixtures
         {
             var builder = new LocalDynamoDbBuilder().Container().UsingImage("amazon/dynamodb-local").ExposePort(8000);
             _dynamo = builder.Build();
-            
             _dynamo.Start();
         }
-
-        public void Start()
-            => _dynamo.Start();
-        
-        public void Stop()
-            => _dynamo.Stop();
 
         public void Dispose()
             => _dynamo.Stop();
