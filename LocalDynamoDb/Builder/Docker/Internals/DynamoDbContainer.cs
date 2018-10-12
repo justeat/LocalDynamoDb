@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
 using Amazon.Runtime;
 using Docker.DotNet.Models;
 
-namespace LocalDynamoDb.Docker
+namespace LocalDynamoDb.Builder.Docker.Internals
 {
     public class DynamoDbContainer : DockerServer
     {

@@ -10,7 +10,7 @@ using static System.FormattableString;
 
 namespace LocalDynamoDb
 {
-    public class LocalDynamoJar : LocalDynamoDb
+    public class LocalDynamoJar
     {
         private readonly int _port;
         private Process Dynamo { get; set; }
@@ -53,7 +53,7 @@ namespace LocalDynamoDb
             return processJar;
         }
 
-        public override void Start()
+        public void Start()
         {
             Console.WriteLine("Starting in memory DynamoDb");
             var success = Dynamo.Start();
@@ -65,7 +65,7 @@ namespace LocalDynamoDb
             }
         }
 
-        public override void Stop()
+        public void Stop()
         {
             Console.WriteLine("Stopping in memory DynamoDb");
             try

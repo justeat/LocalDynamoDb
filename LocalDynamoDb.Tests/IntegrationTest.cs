@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using LocalDynamoDb.Builder.Docker.Internals;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,11 +20,12 @@ namespace LocalDynamoDb.Tests
         [Fact]
         public async Task FullIntegrationTest()
         {
-            LocalDynamo localDynamo = new LocalDynamo("jar path",8001);
+/*
+            var localDynamo = new DynamoDbContainer("jar path",8001);
 
             try
             {
-                localDynamo.Start();
+                localDynamo.Start(lo);
                 
                 await Task.Delay(4000);
                 await CreateTestTable(localDynamo.Client);
@@ -35,6 +37,7 @@ namespace LocalDynamoDb.Tests
             {
                 localDynamo.Stop();
             }
+*/
         }
 
         private async Task CreateTestTable(IAmazonDynamoDB dynamoClient)

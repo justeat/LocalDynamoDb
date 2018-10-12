@@ -1,6 +1,6 @@
 using System;
 using Docker.DotNet;
-using LocalDynamoDb.Docker;
+using LocalDynamoDb.Builder.Docker.Internals;
 
 namespace LocalDynamoDb.Tests
 {

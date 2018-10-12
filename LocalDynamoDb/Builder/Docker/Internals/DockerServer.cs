@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 
-namespace LocalDynamoDb.Docker
+namespace LocalDynamoDb.Builder.Docker.Internals
 {
     public abstract class DockerServer
     {
@@ -73,7 +73,11 @@ namespace LocalDynamoDb.Docker
             {
                 var r = await IsReady();
                 if (r)
+                {
+                    Console.WriteLine($"Container '{ContainerName}' is ready.");
+                    StartAction = StartAction.Started;
                     return;
+                }
                 
                 i++;
 
@@ -83,11 +87,7 @@ namespace LocalDynamoDb.Docker
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
-            }
-
-            Console.WriteLine($"Container '{ContainerName}' is ready.");
-
-            StartAction = StartAction.Started;
+            }   
         }
 
         public static StartAction StartAction { get; private set; } = StartAction.None;
