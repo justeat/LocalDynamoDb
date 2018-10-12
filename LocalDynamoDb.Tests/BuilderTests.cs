@@ -1,4 +1,3 @@
-using System;
 using LocalDynamoDb.Builder;
 using LocalDynamoDb.Builder.Docker;
 using Shouldly;
@@ -8,12 +7,7 @@ namespace LocalDynamoDb.Tests
 {
     public class BuilderTests
     {
-        public BuilderTests()
-        {
-            /*ICanCreateClient builder2 = new LocalDynamoDbBuilder().JarBinaries().InPath("path").OnPort(8001);
-            AmazonDynamoDBClient client2 = builder2.CreateClient();*/
-        }
-        
+       
         [Fact]
         public void CanBuildDockerDynamoInstance()
         {
