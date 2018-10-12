@@ -37,7 +37,7 @@ namespace LocalDynamoDb.Builder.Docker
             try
             {
                 // TODO Perhaps return task and let consumer wait?
-                _container.Start(_dockerClient).Wait(TimeSpan.FromSeconds(60));
+                _container.Start(_dockerClient).Wait(TimeSpan.FromSeconds(10));
             }
             catch (Exception e)
             {

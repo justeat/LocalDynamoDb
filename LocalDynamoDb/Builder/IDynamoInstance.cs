@@ -3,16 +3,12 @@ using Amazon.DynamoDBv2;
 
 namespace LocalDynamoDb.Builder
 {    
-    public interface IStartStop
+    public interface IDynamoInstance
     {
+        AmazonDynamoDBClient Client { get; }
+        
         bool Start();
+        
         Task Stop();
-    }
-
-    public interface IDynamoInstance : IStartStop
-    {
-        
-        
-        AmazonDynamoDBClient Client { get; }   
     }
 }

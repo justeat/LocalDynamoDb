@@ -13,7 +13,7 @@ namespace LocalDynamoDb.Builder.JavaBinaries
         ICanCreateClient OnPort(int portNumber);
     }
     
-    public class JarBuilder : ICanCreateClient, IHasPath, IUsingPort, IStartStop
+    public class JarBuilder : ICanCreateClient, IHasPath, IUsingPort
     {
         public AmazonDynamoDBClient CreateClient()
         {
