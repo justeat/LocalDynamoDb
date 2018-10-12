@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.Model;
-using LocalDynamoDb.Builder;
-using LocalDynamoDb.Builder.Docker;
 using LocalDynamoDb.Tests.Fixtures;
 using Shouldly;
 using Xunit;

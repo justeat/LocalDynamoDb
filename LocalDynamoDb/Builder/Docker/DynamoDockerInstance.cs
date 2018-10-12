@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.Runtime;
@@ -19,8 +20,14 @@ namespace LocalDynamoDb.Builder.Docker
             _containerName = configuration.ContainerNameGenerator();
             _configuration = configuration;
             
-            _dockerClient = new DockerClientConfiguration(new Uri("unix:///var/run/docker.sock")).CreateClient();
+            _dockerClient = new DockerClientConfiguration(LocalDockerUri()).CreateClient();
             _container = new DynamoDbContainer(configuration.ImageName, _containerName, configuration.PortNumber);
+        }
+        
+        private static Uri LocalDockerUri()
+        {
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            return isWindows ? new Uri("npipe://./pipe/docker_engine") : new Uri("unix:/var/run/docker.sock");
         }
 
         public int GetPortNumber() 

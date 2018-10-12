@@ -5,8 +5,6 @@ namespace LocalDynamoDb.Builder
 {    
     public interface IDynamoInstance
     {
-        /*AmazonDynamoDBClient Client { get; }*/
-
         AmazonDynamoDBClient CreateClient();
         
         bool Start();
