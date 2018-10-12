@@ -1,21 +1,28 @@
+using System;
 using LocalDynamoDb.Builder;
 
 namespace LocalDynamoDb.Tests.Fixtures
 {
-    public class DockerTestFixture
+    public class DockerTestFixture : IDisposable
     {
-        private readonly IDynamoInstance _instance1;
+        private readonly IDynamoInstance _dynamo;
 
         public DockerTestFixture()
         {
             var builder = new LocalDynamoDbBuilder().Container().UsingImage("amazon/dynamodb-local").ExposePort(8001);
-            _instance1 = builder.Build();
+            _dynamo = builder.Build();
+            _dynamo.Start();
         }
 
         public void Start()
-            => _instance1.Start();
+            => _dynamo.Start();
         
         public void Stop()
-            => _instance1.Stop();
+            => _dynamo.Stop();
+
+        public void Dispose()
+        {
+            _dynamo.Stop();
+        }
     }
 }

@@ -6,11 +6,11 @@ using Xunit;
 
 namespace LocalDynamoDb.Tests
 {
-    public class DockerDynamoTests
+    public class DockerDynamoTests : IClassFixture<DockerTestFixture>
     {
-        private readonly IClassFixture<DockerTestFixture> _fixture;
+        private readonly DockerTestFixture _fixture;
 
-        public DockerDynamoTests(IClassFixture<DockerTestFixture> fixture)
+        public DockerDynamoTests(DockerTestFixture fixture)
         {
             _fixture = fixture;
             /*ICanCreateClient builder2 = new LocalDynamoDbBuilder().JarBinaries().InPath("path").OnPort(8001);
@@ -20,10 +20,7 @@ namespace LocalDynamoDb.Tests
         [Fact]
         public void ShouldStart()
         {
-            _fixture.St
-
-            instance1.Start().ShouldBe(true);
-            instance1.Stop();
+            
         }
     }
 
