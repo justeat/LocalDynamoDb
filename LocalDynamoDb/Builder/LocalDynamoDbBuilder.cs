@@ -6,19 +6,16 @@ namespace LocalDynamoDb.Builder
     public interface ILocalDynamoDbBuilder
     {
         DockerBuilder Container();
+
         JarBuilder JarBinaries();
     }
     
     public class LocalDynamoDbBuilder
     {
         public IHasPath JarBinaries()
-        {
-            return new JarBuilder();
-        }
+            => new JarBuilder();
 
         public IIsContainer Container()
-        {
-            return new DockerBuilder();
-        }
+            => new DockerBuilder();
     }
 }

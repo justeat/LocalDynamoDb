@@ -1,17 +1,17 @@
-using System;
-
 namespace LocalDynamoDb.Builder.Docker
 {
     public interface IExposePort
     {
-        IDynamoBuilder ExposePort(int portNumber);
+        IDynamoBuilder ExposePort(int portNumber = 8000);
     }
     
     public interface IIsContainer : IExposePort
     {
-        IIsContainer UsingImage(string imageName);
+        IIsContainer UsingDefaultImage();
+        
+        IIsContainer UsingCustomImage(string imageName);
 
-        IIsContainer ContainerName(Func<string> containerName);
+        IIsContainer ContainerName(string containerName);
     }
     
     public interface IDynamoBuilder
@@ -27,8 +27,12 @@ namespace LocalDynamoDb.Builder.Docker
         {
             _configuration = new DockerConfiguration();
         }
+
+        public IIsContainer UsingDefaultImage()
+            => this;
         
-        public IIsContainer UsingImage(string imageName)
+
+        public IIsContainer UsingCustomImage(string imageName)
         {
             if (!string.IsNullOrWhiteSpace(imageName))
                 _configuration.ImageName = imageName;
@@ -36,17 +40,18 @@ namespace LocalDynamoDb.Builder.Docker
             return this;
         }
     
-        public IIsContainer ContainerName(Func<string> containerName)
+        public IIsContainer ContainerName(string containerName)
         {
-            if (containerName != null)
-                _configuration.ContainerNameGenerator = containerName;
-            
+            if (!string.IsNullOrWhiteSpace(containerName))
+                _configuration.ContainerName = containerName;
+
             return this;
         }
 
         public IDynamoBuilder ExposePort(int portNumber)
         {
             _configuration.PortNumber = portNumber;
+
             return this;
         }
 

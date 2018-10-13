@@ -13,15 +13,13 @@ namespace LocalDynamoDb.Builder.Docker
         private readonly DockerConfiguration _configuration;
         private readonly IDockerClient _dockerClient;
         private readonly DynamoDbContainer _container;
-        private readonly string _containerName;
         
         public DynamoDockerInstance(DockerConfiguration configuration)
         {
-            _containerName = configuration.ContainerNameGenerator();
             _configuration = configuration;
             
             _dockerClient = new DockerClientConfiguration(LocalDockerUri()).CreateClient();
-            _container = new DynamoDbContainer(configuration.ImageName, _containerName, configuration.PortNumber);
+            _container = new DynamoDbContainer(configuration.ImageName, configuration.ContainerName, configuration.PortNumber);
         }
         
         private static Uri LocalDockerUri()
@@ -30,13 +28,13 @@ namespace LocalDynamoDb.Builder.Docker
             return isWindows ? new Uri("npipe://./pipe/docker_engine") : new Uri("unix:/var/run/docker.sock");
         }
 
-        public int GetPortNumber() 
-            => _configuration.PortNumber;
+        public int PortNumber
+            => _configuration.PortNumber; 
 
-        public string GetContainerName()
-            => _containerName;
+        public string ContainerName
+            => _configuration.ContainerName;
 
-        public string GetImageName()
+        public string ImageName
             => _configuration.ImageName;
 
         public bool Start()
@@ -44,7 +42,7 @@ namespace LocalDynamoDb.Builder.Docker
             try
             {
                 // TODO Perhaps return task and let consumer wait?
-                _container.Start(_dockerClient).Wait(TimeSpan.FromSeconds(30));
+                _container.Start(_dockerClient).Wait(TimeSpan.FromSeconds(60));
             }
             catch (Exception e)
             {

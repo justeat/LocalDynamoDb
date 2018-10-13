@@ -7,12 +7,11 @@ namespace LocalDynamoDb.Tests
 {
     public class BuilderTests
     {
-       
         [Fact]
         public void CanBuildDockerDynamoInstance()
         {
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingImage("amazon/dynamodb-local").ExposePort(8000);
-            var instance1 = builder1.Build();
+            var builder1 = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort(8000);
+            IDynamoInstance instance1 = builder1.Build();
             instance1.CreateClient();
             
             instance1.ShouldNotBeNull();
@@ -20,18 +19,18 @@ namespace LocalDynamoDb.Tests
         }
         
         [Fact]
-        public void ConfigurationShouldBeCorrect()
+        public void DockerConfigurationAreSet()
         {
             var image = "amazon/dynamodb-local";
             var port = 8000;
             var containerName = "docker-dynamo-local";
             
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingImage(image).ContainerName(() => containerName).ExposePort(port);
+            var builder1 = new LocalDynamoDbBuilder().Container().UsingCustomImage(image).ContainerName(containerName).ExposePort(port);
             var instance1 = (DynamoDockerInstance)builder1.Build();
             
-            instance1.GetImageName().ShouldBe(image);
-            instance1.GetPortNumber().ShouldBe(port);
-            instance1.GetContainerName().ShouldBe(containerName);
+            instance1.ImageName.ShouldBe(image);
+            instance1.PortNumber.ShouldBe(port);
+            instance1.ContainerName.ShouldBe(containerName);
         }
     }
 }

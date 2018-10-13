@@ -8,7 +8,7 @@ using Docker.DotNet.Models;
 
 namespace LocalDynamoDb.Builder.Docker.Internals
 {
-    public class DynamoDbContainer : DockerServer
+    internal sealed class DynamoDbContainer : DockerServer
     {
         private readonly int _portNumber;
 
@@ -22,7 +22,7 @@ namespace LocalDynamoDb.Builder.Docker.Internals
             try
             {
                 var config = new AmazonDynamoDBConfig {ServiceURL = $"http://localhost:{_portNumber}"};
-                var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
+                var credentials = new BasicAWSCredentials("none", "needed");
                 var client = new AmazonDynamoDBClient(credentials, config);
 
                 var t = await client.ListTablesAsync();

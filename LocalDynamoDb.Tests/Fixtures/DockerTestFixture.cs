@@ -10,8 +10,9 @@ namespace LocalDynamoDb.Tests.Fixtures
 
         public DockerTestFixture()
         {
-            var builder = new LocalDynamoDbBuilder().Container().UsingImage("amazon/dynamodb-local").ExposePort(8000);
+            var builder = new LocalDynamoDbBuilder().Container().UsingCustomImage("cnadiminti/dynamodb-local").ExposePort();
             _dynamo = builder.Build();
+
             _dynamo.Start();
         }
 

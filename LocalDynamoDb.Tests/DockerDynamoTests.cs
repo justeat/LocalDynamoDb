@@ -53,5 +53,17 @@ namespace LocalDynamoDb.Tests
             var result = await _fixture.Client.CreateTableAsync(tableRequest);
             result.HttpStatusCode.ShouldBe(HttpStatusCode.OK);
         }
+
+        [Fact]
+        public void ShouldStop()
+        {
+            // TODO: Use Docker Client and check to see if running?
+        }
+        
+        [Fact]
+        public void CanPullImage()
+        {
+            // TODO: Use Docker Client and check to see if running?
+        }
     }
 }
