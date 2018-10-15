@@ -14,11 +14,6 @@ namespace LocalDynamoDb.Builder.Docker
         IIsContainer ContainerName(string containerName);
     }
     
-    public interface IDynamoBuilder
-    {
-        IDynamoInstance Build();
-    }
-    
     public class DockerBuilder : IIsContainer, IDynamoBuilder
     {
         private readonly DockerConfiguration _configuration;

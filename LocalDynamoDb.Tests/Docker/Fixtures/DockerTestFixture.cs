@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Amazon.DynamoDBv2;
 using Docker.DotNet;
 using Docker.DotNet.Models;
-using LocalDynamoDb.Builder;
 
-namespace LocalDynamoDb.Tests.Fixtures
+namespace LocalDynamoDb.Tests.Docker.Fixtures
 {
     public class DockerClientTestFixture : IDisposable
     {

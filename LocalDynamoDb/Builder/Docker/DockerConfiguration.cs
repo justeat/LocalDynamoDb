@@ -1,6 +1,6 @@
 namespace LocalDynamoDb.Builder.Docker
 {
-    public sealed class DockerConfiguration
+    internal sealed class DockerConfiguration
     {
         public DockerConfiguration()
         {

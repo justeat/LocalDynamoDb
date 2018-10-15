@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.Model;
-using LocalDynamoDb.Tests.Fixtures;
+using LocalDynamoDb.Tests.Docker.Fixtures;
 using Shouldly;
 using Xunit;
 
-namespace LocalDynamoDb.Tests
+namespace LocalDynamoDb.Tests.Docker
 {
     public class DockerDynamoTests : IClassFixture<LocalDynamoFixture>
     {

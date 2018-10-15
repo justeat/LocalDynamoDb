@@ -2,8 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using LocalDynamoDb.Builder;
+using LocalDynamoDb.Builder.Docker;
 
-namespace LocalDynamoDb.Tests.Fixtures
+namespace LocalDynamoDb.Tests.Docker.Fixtures
 {
     public class LocalDynamoFixture : IDisposable
     {

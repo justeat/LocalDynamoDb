@@ -4,13 +4,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.Runtime;
-using static System.FormattableString; 
 
-namespace LocalDynamoDb
+namespace LocalDynamoDb.Builder.JavaBinaries.Internals
 {
-    public class LocalDynamoJar
+    internal class LocalDynamoJar : IDynamoInstance, IJarBinariesDynamoInstance
     {
         private readonly int _port;
         private Process Dynamo { get; set; }
@@ -22,7 +22,12 @@ namespace LocalDynamoDb
             Dynamo = Create(_port);
             Client = CreateClient();
         }
-        
+
+        public LocalDynamoJar(JarBinariesConfiguration configuration)
+        {
+            throw new NotImplementedException();
+        }
+
         private static Process Create(int portNumber)
         {
             var processJar = new Process();
@@ -53,7 +58,7 @@ namespace LocalDynamoDb
             return processJar;
         }
 
-        public void Start()
+        public bool Start()
         {
             Console.WriteLine("Starting in memory DynamoDb");
             var success = Dynamo.Start();
@@ -63,9 +68,11 @@ namespace LocalDynamoDb
             {
                 throw new Exception("Error starting dynamo: " + Dynamo.StandardError.ReadToEnd());
             }
+
+            return true;
         }
 
-        public void Stop()
+        public Task Stop()
         {
             Console.WriteLine("Stopping in memory DynamoDb");
             try
@@ -77,11 +84,13 @@ namespace LocalDynamoDb
                 Console.WriteLine(Dynamo.StandardError.ReadToEnd());
                 throw;
             }
+
+            return Task.CompletedTask;
         }
 
-        private AmazonDynamoDBClient CreateClient()
+        public AmazonDynamoDBClient CreateClient()
         {
-            var config = new AmazonDynamoDBConfig { ServiceURL = Invariant($"http://localhost:{_port}")};
+            var config = new AmazonDynamoDBConfig { ServiceURL = FormattableString.Invariant($"http://localhost:{_port}")};
             var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
             return new AmazonDynamoDBClient(credentials, config);
         }

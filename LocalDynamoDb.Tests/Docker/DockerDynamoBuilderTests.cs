@@ -3,7 +3,7 @@ using LocalDynamoDb.Builder.Docker;
 using Shouldly;
 using Xunit;
 
-namespace LocalDynamoDb.Tests
+namespace LocalDynamoDb.Tests.Docker
 {
     public class DockerDynamoBuilderTests
     {

@@ -12,7 +12,7 @@ namespace LocalDynamoDb.Builder
     
     public class LocalDynamoDbBuilder
     {
-        public IHasPath JarBinaries()
+        public IJavaBinaries JarBinaries()
             => new JarBuilder();
 
         public IIsContainer Container()
