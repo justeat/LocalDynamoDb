@@ -22,7 +22,7 @@ namespace LocalDynamoDb.Builder.Docker.Internals
             try
             {
                 var config = new AmazonDynamoDBConfig {ServiceURL = $"http://localhost:{_portNumber}"};
-                var credentials = new BasicAWSCredentials("none", "needed");
+                var credentials = new BasicAWSCredentials("abc", "abc");
                 var client = new AmazonDynamoDBClient(credentials, config);
 
                 var t = await client.ListTablesAsync();

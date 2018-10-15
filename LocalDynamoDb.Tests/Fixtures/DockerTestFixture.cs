@@ -1,25 +1,42 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
+using Docker.DotNet;
+using Docker.DotNet.Models;
 using LocalDynamoDb.Builder;
 
 namespace LocalDynamoDb.Tests.Fixtures
 {
-    public class DockerTestFixture : IDisposable
+    public class DockerClientTestFixture : IDisposable
     {
-        private readonly IDynamoInstance _dynamo;
+        private readonly DockerClient _client;
 
-        public DockerTestFixture()
+        public DockerClientTestFixture()
         {
-            var builder = new LocalDynamoDbBuilder().Container().UsingCustomImage("cnadiminti/dynamodb-local").ExposePort();
-            _dynamo = builder.Build();
-
-            _dynamo.Start();
+            _client = new DockerClientConfiguration(LocalDockerUri()).CreateClient();
         }
 
-        public void Dispose()
-            => _dynamo.Stop();
+        public async Task<IList<ImagesListResponse>> ListImages(string imageName)
+            => await _client.Images.ListImagesAsync(new ImagesListParameters { MatchName = imageName });
 
-        public AmazonDynamoDBClient Client
-            => _dynamo.CreateClient();
+        public async Task<IList<ImagesListResponse>> ListAllImages()
+            => await _client.Images.ListImagesAsync(new ImagesListParameters { All = true });
+
+        public async Task<IList<ContainerListResponse>> Stats()
+        {
+            return await _client.Containers.ListContainersAsync(new ContainersListParameters(), CancellationToken.None);
+        }
+        
+        private static Uri LocalDockerUri()
+        {
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            return isWindows ? new Uri("npipe://./pipe/docker_engine") : new Uri("unix:/var/run/docker.sock");
+        }
+        
+        public void Dispose()
+            => _client.Dispose();
     }
 }

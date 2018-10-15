@@ -7,8 +7,7 @@ namespace LocalDynamoDb.Builder.Docker
             ImageName = LocalDynamoDefault.DefaultDockerImage;
             ContainerName = LocalDynamoDefault.DefaultContainerName;
             PortNumber = LocalDynamoDefault.DefaultPortNumber;
-            Tag = "latest";
-
+            Tag = LocalDynamoDefault.DefaultTag;
         }
 
         public string ImageName { get; set; }

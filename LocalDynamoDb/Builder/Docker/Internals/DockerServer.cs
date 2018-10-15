@@ -21,6 +21,17 @@ namespace LocalDynamoDb.Builder.Docker.Internals
             ContainerName = containerName;
         }
 
+        public async Task<string> GetStateAsync(IDockerClient client)
+        {
+            var list = await client.Containers.ListContainersAsync(new ContainersListParameters
+            {
+                All = true
+            });
+            
+            var container = list.FirstOrDefault(x => x.Names.Contains("/" + ContainerName));
+            return container.State;
+        }
+
         public async Task Start(IDockerClient client)
         {
             if (StartAction != StartAction.None)
@@ -44,7 +55,6 @@ namespace LocalDynamoDb.Builder.Docker.Internals
                 All = true
             });
 
-            
             if (!string.IsNullOrWhiteSpace(ContainerName))
             {
                 var container = list.FirstOrDefault(x => x.Names.Contains("/" + ContainerName));
@@ -87,7 +97,7 @@ namespace LocalDynamoDb.Builder.Docker.Internals
                     throw new TimeoutException($"Container {ContainerName} does not seem to be responding in a timely manner");
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(3));
+                await Task.Delay(TimeSpan.FromSeconds(2));
             }   
         }
 

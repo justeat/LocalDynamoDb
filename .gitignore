@@ -188,3 +188,4 @@ FakesAssemblies/
 
 # JetBrains
 .idea/*
+.vscode/*

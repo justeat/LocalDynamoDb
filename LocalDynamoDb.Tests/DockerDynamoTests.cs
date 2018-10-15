@@ -5,25 +5,21 @@ using Amazon.DynamoDBv2.Model;
 using LocalDynamoDb.Tests.Fixtures;
 using Shouldly;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace LocalDynamoDb.Tests
 {
-    public class DockerDynamoTests : IClassFixture<DockerTestFixture>
+    public class DockerDynamoTests : IClassFixture<LocalDynamoFixture>
     {
-        private readonly DockerTestFixture _fixture;
-        private readonly ITestOutputHelper _output;
+        private readonly LocalDynamoFixture _fixture;
 
-        public DockerDynamoTests(DockerTestFixture fixture, ITestOutputHelper output)
+        public DockerDynamoTests(LocalDynamoFixture fixture)
         {
             _fixture = fixture;
-            _output = output;
         }
-                
+  
         [Fact]
-        public async Task ShouldStart()
+        public async Task DynamoDbStarts()
         {
-            _output.WriteLine("Creating tables.");
             var tableRequest = new CreateTableRequest
             {
                 TableName = "testTable",
@@ -53,17 +49,12 @@ namespace LocalDynamoDb.Tests
             var result = await _fixture.Client.CreateTableAsync(tableRequest);
             result.HttpStatusCode.ShouldBe(HttpStatusCode.OK);
         }
-
-        [Fact]
-        public void ShouldStop()
-        {
-            // TODO: Use Docker Client and check to see if running?
-        }
         
         [Fact]
-        public void CanPullImage()
+        public async Task StateIsRunning()
         {
-            // TODO: Use Docker Client and check to see if running?
+            var state = await _fixture.GetStateAsync();
+            state.ShouldBe("running");
         }
     }
 }

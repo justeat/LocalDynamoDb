@@ -7,9 +7,9 @@ namespace LocalDynamoDb.Builder.Docker
     
     public interface IIsContainer : IExposePort
     {
-        IIsContainer UsingDefaultImage();
+        IIsContainer UsingDefaultImage(string tag = "latest");
         
-        IIsContainer UsingCustomImage(string imageName);
+        IIsContainer UsingCustomImage(string imageName, string tag = "latest");
 
         IIsContainer ContainerName(string containerName);
     }
@@ -28,14 +28,21 @@ namespace LocalDynamoDb.Builder.Docker
             _configuration = new DockerConfiguration();
         }
 
-        public IIsContainer UsingDefaultImage()
-            => this;
+        public IIsContainer UsingDefaultImage(string tag = "latest")
+        {
+            if (!string.IsNullOrWhiteSpace(tag))
+                _configuration.Tag = tag;
+            
+            return this;
+        }
         
-
-        public IIsContainer UsingCustomImage(string imageName)
+        public IIsContainer UsingCustomImage(string imageName, string tag = "latest")
         {
             if (!string.IsNullOrWhiteSpace(imageName))
                 _configuration.ImageName = imageName;
+            
+            if (!string.IsNullOrWhiteSpace(tag))
+                _configuration.Tag = tag;
             
             return this;
         }
@@ -56,6 +63,6 @@ namespace LocalDynamoDb.Builder.Docker
         }
 
         public IDynamoInstance Build()
-            => new DynamoDockerInstance(_configuration);
+            => new DynamoDockerDynamoInstance(_configuration);
     }
 }

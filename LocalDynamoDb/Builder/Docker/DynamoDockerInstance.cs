@@ -8,13 +8,13 @@ using LocalDynamoDb.Builder.Docker.Internals;
 
 namespace LocalDynamoDb.Builder.Docker
 {
-    public class DynamoDockerInstance : IDynamoInstance
+    internal class DynamoDockerDynamoInstance : IDynamoInstance, IDockerDynamoInstance
     {
         private readonly DockerConfiguration _configuration;
         private readonly IDockerClient _dockerClient;
         private readonly DynamoDbContainer _container;
         
-        public DynamoDockerInstance(DockerConfiguration configuration)
+        public DynamoDockerDynamoInstance(DockerConfiguration configuration)
         {
             _configuration = configuration;
             
@@ -37,6 +37,12 @@ namespace LocalDynamoDb.Builder.Docker
         public string ImageName
             => _configuration.ImageName;
 
+        public string Tag
+            => _configuration.Tag;
+
+        public Task<string> GetStateAsync()
+            => _container.GetStateAsync(_dockerClient);
+
         public bool Start()
         {
             try
@@ -54,9 +60,7 @@ namespace LocalDynamoDb.Builder.Docker
         }
 
         public async Task Stop()
-        {
-            await _container.Stop(_dockerClient);
-        }
+            => await _container.Stop(_dockerClient);
 
         public AmazonDynamoDBClient CreateClient()
         {
