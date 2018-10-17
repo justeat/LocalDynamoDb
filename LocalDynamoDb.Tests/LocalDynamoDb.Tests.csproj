@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AWSSDK.Core" Version="3.3.27" />
+        <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.14.5" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+        <PackageReference Include="Shouldly" Version="3.0.1" />
+        <PackageReference Include="xunit" Version="2.4.0" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="dynamodblocal/**" CopyToOutputDirectory="Always" />
+        <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Folder Include="dynamodblocal\DynamoDBLocal_lib" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\LocalDynamoDb\LocalDynamoDb.csproj" />
+    </ItemGroup>
+
+</Project>

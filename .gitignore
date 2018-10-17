@@ -185,3 +185,7 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 *.orig
+
+# JetBrains
+.idea/*
+.vscode/*
