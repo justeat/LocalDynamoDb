@@ -10,22 +10,17 @@ using Amazon.Runtime;
 
 namespace LocalDynamoDb.Builder.JavaBinaries.Internals
 {
-    internal class LocalDynamoJar : IDynamoInstance, IJarBinariesDynamoInstance
+    internal sealed class LocalDynamoJar
     {
-        private readonly int _port;
-        private Process Dynamo { get; set; }
+        private readonly JarBinariesConfiguration _configuration;
+        private Process DynamoProcess { get; set; }
         public AmazonDynamoDBClient Client { get; private set; }
-        
-        public LocalDynamoJar(string path, int portNumber = 8000)
-        {
-            _port = portNumber;
-            Dynamo = Create(_port);
-            Client = CreateClient();
-        }
 
         public LocalDynamoJar(JarBinariesConfiguration configuration)
-        {
-            throw new NotImplementedException();
+        {            
+            DynamoProcess = Create(configuration.PortNumber);
+            
+            _configuration = configuration;
         }
 
         private static Process Create(int portNumber)
@@ -55,18 +50,18 @@ namespace LocalDynamoDb.Builder.JavaBinaries.Internals
             processJar.StartInfo.UseShellExecute = false;
             processJar.StartInfo.RedirectStandardOutput = true;
             processJar.StartInfo.RedirectStandardError = true;
+            
             return processJar;
         }
 
         public bool Start()
         {
             Console.WriteLine("Starting in memory DynamoDb");
-            var success = Dynamo.Start();
+            var success = DynamoProcess.Start();
             
-            Client = CreateClient();
             if (!success)
             {
-                throw new Exception("Error starting dynamo: " + Dynamo.StandardError.ReadToEnd());
+                throw new Exception("Error starting dynamo: " + DynamoProcess.StandardError.ReadToEnd());
             }
 
             return true;
@@ -77,11 +72,11 @@ namespace LocalDynamoDb.Builder.JavaBinaries.Internals
             Console.WriteLine("Stopping in memory DynamoDb");
             try
             {
-                Dynamo.Kill();
+                DynamoProcess.Kill();
             }
             catch (Win32Exception)
             {
-                Console.WriteLine(Dynamo.StandardError.ReadToEnd());
+                Console.WriteLine(DynamoProcess.StandardError.ReadToEnd());
                 throw;
             }
 
@@ -90,7 +85,7 @@ namespace LocalDynamoDb.Builder.JavaBinaries.Internals
 
         public AmazonDynamoDBClient CreateClient()
         {
-            var config = new AmazonDynamoDBConfig { ServiceURL = FormattableString.Invariant($"http://localhost:{_port}")};
+            var config = new AmazonDynamoDBConfig { ServiceURL = FormattableString.Invariant($"http://localhost:{_configuration.PortNumber}")};
             var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
             return new AmazonDynamoDBClient(credentials, config);
         }

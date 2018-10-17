@@ -7,13 +7,13 @@ namespace LocalDynamoDb.Builder
     {
         DockerBuilder Container();
 
-        JarBuilder JarBinaries();
+        JarBinariesBuilder JarBinaries();
     }
     
     public class LocalDynamoDbBuilder
     {
         public IJavaBinaries JarBinaries()
-            => new JarBuilder();
+            => new JarBinariesBuilder();
 
         public IIsContainer Container()
             => new DockerBuilder();

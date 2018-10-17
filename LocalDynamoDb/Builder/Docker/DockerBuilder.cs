@@ -58,6 +58,6 @@ namespace LocalDynamoDb.Builder.Docker
         }
 
         public IDynamoInstance Build()
-            => new DynamoDockerDynamoInstance(_configuration);
+            => new DockerDynamoInstance(_configuration);
     }
 }

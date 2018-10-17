@@ -20,6 +20,7 @@ namespace LocalDynamoDb.Tests.Docker
         [Fact]
         public async Task DynamoDbStarts()
         {
+            // Arrange
             var tableRequest = new CreateTableRequest
             {
                 TableName = "testTable",
@@ -46,14 +47,20 @@ namespace LocalDynamoDb.Tests.Docker
                 }
             };
 
+            // Act
             var result = await _fixture.Client.CreateTableAsync(tableRequest);
+            
+            // Assert
             result.HttpStatusCode.ShouldBe(HttpStatusCode.OK);
         }
         
         [Fact]
         public async Task StateIsRunning()
         {
+            // Act
             var state = await _fixture.GetStateAsync();
+            
+            // Assert
             state.ShouldBe("running");
         }
     }

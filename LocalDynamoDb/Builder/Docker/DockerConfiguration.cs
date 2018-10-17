@@ -4,10 +4,10 @@ namespace LocalDynamoDb.Builder.Docker
     {
         public DockerConfiguration()
         {
-            ImageName = LocalDynamoDefault.DefaultDockerImage;
-            ContainerName = LocalDynamoDefault.DefaultContainerName;
+            ImageName = LocalDynamoDefault.Docker.DefaultDockerImage;
+            ContainerName = LocalDynamoDefault.Docker.DefaultContainerName;
             PortNumber = LocalDynamoDefault.DefaultPortNumber;
-            Tag = LocalDynamoDefault.DefaultTag;
+            Tag = LocalDynamoDefault.Docker.DefaultTag;
         }
 
         public string ImageName { get; set; }

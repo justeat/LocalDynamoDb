@@ -1,3 +1,4 @@
+using Amazon.DynamoDBv2;
 using LocalDynamoDb.Builder;
 using LocalDynamoDb.Builder.Docker;
 using Shouldly;
@@ -10,20 +11,27 @@ namespace LocalDynamoDb.Tests.Docker
         [Fact]
         public void CanBuildDockerDynamoInstance()
         {
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
-            var instance1 = builder1.Build();
+            // Arrange
+            var builder = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
+            
+            // Act
+            var dynamo = builder.Build();
 
-            instance1.ShouldNotBeNull();
-            instance1.ShouldBeAssignableTo<IDockerDynamoInstance>();
+            // Assert
+            dynamo.ShouldBeAssignableTo<IDockerDynamoInstance>();
         }
 
         [Fact]
         public void DefaultImageNameIsSet()
         {
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
-            var instance1 = (IDockerDynamoInstance) builder1.Build();
+            // Arrange
+            var builder = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
+            
+            // Act
+            var dynamo = (IDockerDynamoInstance) builder.Build();
 
-            instance1.ImageName.ShouldBe("amazon/dynamodb-local");
+            // Assert
+            dynamo.ImageName.ShouldBe("amazon/dynamodb-local");
         }
 
         [Fact]
@@ -31,19 +39,27 @@ namespace LocalDynamoDb.Tests.Docker
         {
             var image = "my-custom-image";
 
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingCustomImage(image).ExposePort();
-            var instance1 = (IDockerDynamoInstance) builder1.Build();
+            // Arrange
+            var builder = new LocalDynamoDbBuilder().Container().UsingCustomImage(image).ExposePort();
+            
+            // Act
+            var dynamo = (IDockerDynamoInstance) builder.Build();
 
-            instance1.ImageName.ShouldBe(image);
+            // Assert
+            dynamo.ImageName.ShouldBe(image);
         }
 
         [Fact]
         public void DefaultPortIsSet()
         {
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
-            var instance1 = (IDockerDynamoInstance) builder1.Build();
+            // Arrange
+            var builder = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
+            
+            // Act
+            var dynamo = (IDockerDynamoInstance) builder.Build();
 
-            instance1.PortNumber.ShouldBe(8000);
+            // Assert
+            dynamo.PortNumber.ShouldBe(8000);
         }
 
         [Fact]
@@ -51,50 +67,101 @@ namespace LocalDynamoDb.Tests.Docker
         {
             var customPort = 8001;
 
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort(customPort);
-            var instance1 = (IDockerDynamoInstance) builder1.Build();
+            // Arrange
+            var builder = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort(customPort);
+            
+            // Act
+            var dynamo = (IDockerDynamoInstance) builder.Build();
 
-            instance1.PortNumber.ShouldBe(customPort);
+            // Assert
+            dynamo.PortNumber.ShouldBe(customPort);
         }
 
         [Fact]
         public void DefaultContainerNameIsSet()
         {
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
-            var instance1 = (IDockerDynamoInstance) builder1.Build();
+            // Arrange
+            var builder = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
+            
+            // Act
+            var dynamo = (IDockerDynamoInstance) builder.Build();
 
-            instance1.ContainerName.ShouldBe("docker-dynamo-local");
+            // Assert
+            dynamo.ContainerName.ShouldBe("docker-dynamo-local");
         }
 
 
         [Fact]
         public void CustomContainerNameIsSet()
         {
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ContainerName("custom-name")
+            // Arrange
+            var builder = new LocalDynamoDbBuilder()
+                .Container()
+                .UsingDefaultImage()
+                .ContainerName("custom-name")
                 .ExposePort();
-            var instance1 = (IDockerDynamoInstance) builder1.Build();
+            
+            // Act
+            var dynamo = (IDockerDynamoInstance) builder.Build();
 
-            instance1.ContainerName.ShouldBe("custom-name");
+            // Assert
+            dynamo.ContainerName.ShouldBe("custom-name");
         }
 
         [Fact]
         public void DefaultTagIsLatest()
         {
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
-            var instance1 = (IDockerDynamoInstance) builder1.Build();
+            // Arrange
+            var builder = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
+            
+            // Act
+            var dynamo = (IDockerDynamoInstance) builder.Build();
 
-            instance1.Tag.ShouldBe("latest");
+            // Assert
+            dynamo.Tag.ShouldBe("latest");
         }
 
         [Fact]
         public void CustomTagIsSet()
         {
             var tag = "1.11.119";
+            
+            // Arrange
+            var builder = new LocalDynamoDbBuilder().Container().UsingDefaultImage(tag).ExposePort();
+            
+            // Act
+            var dynamo = (IDockerDynamoInstance) builder.Build();
 
-            var builder1 = new LocalDynamoDbBuilder().Container().UsingDefaultImage(tag).ExposePort();
-            var instance1 = (IDockerDynamoInstance) builder1.Build();
+            // Assert
+            dynamo.Tag.ShouldBe(tag);
+        }
+        
+        [Fact]
+        public void AmazonDynamoDbClientIsCreated()
+        {
+            // Arrange
+            var builder = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
+            var dynamo = builder.Build();
 
-            instance1.Tag.ShouldBe(tag);
+            // Act
+            var client = dynamo.CreateClient();
+
+            // Assert
+            client.ShouldBeAssignableTo<AmazonDynamoDBClient>();
+        }
+                
+        [Fact]
+        public void AmazonDynamoDbClientIsConfiguredCorrectly()
+        {
+            // Arrange
+            var builder = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort(8001);
+            var dynamo = builder.Build();
+            
+            // Act
+            var client = dynamo.CreateClient();
+
+            // Assert
+            client.Config.ServiceURL.ShouldBe("http://localhost:8001");
         }
     }
 }

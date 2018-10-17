@@ -8,13 +8,13 @@ using LocalDynamoDb.Builder.Docker.Internals;
 
 namespace LocalDynamoDb.Builder.Docker
 {
-    internal class DynamoDockerDynamoInstance : IDynamoInstance, IDockerDynamoInstance
+    internal class DockerDynamoInstance : IDynamoInstance, IDockerDynamoInstance
     {
         private readonly DockerConfiguration _configuration;
         private readonly IDockerClient _dockerClient;
         private readonly DynamoDbContainer _container;
         
-        public DynamoDockerDynamoInstance(DockerConfiguration configuration)
+        public DockerDynamoInstance(DockerConfiguration configuration)
         {
             _configuration = configuration;
             

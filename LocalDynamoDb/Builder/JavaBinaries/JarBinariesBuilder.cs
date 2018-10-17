@@ -20,11 +20,11 @@ namespace LocalDynamoDb.Builder.JavaBinaries
         IDynamoBuilder OnDefaultPort();
     }
     
-    public class JarBuilder : IJavaBinaries, IDynamoBuilder
+    public class JarBinariesBuilder : IJavaBinaries, IDynamoBuilder
     {
         private readonly JarBinariesConfiguration _configuration;
 
-        public JarBuilder()
+        public JarBinariesBuilder()
         {
             _configuration = new JarBinariesConfiguration();
         }
@@ -71,7 +71,7 @@ namespace LocalDynamoDb.Builder.JavaBinaries
         }
 
         public IDynamoInstance Build()
-            => new LocalDynamoJar(_configuration);
+            => new JarBinariesDynamoInstance(_configuration);
         
     }
 }
