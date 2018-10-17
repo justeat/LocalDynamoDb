@@ -7,8 +7,10 @@ namespace LocalDynamoDb.Builder
     {
         AmazonDynamoDBClient CreateClient();
         
-        bool Start();
+        Task<bool> Start();
         
         Task Stop();
+        
+        Task<LocalDynamoDbState> GetStateAsync();
     }
 }

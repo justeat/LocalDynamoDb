@@ -16,6 +16,7 @@
 
     <ItemGroup>
         <Content Include="dynamodblocal/**" CopyToOutputDirectory="Always" />
+        <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
     
     <ItemGroup>

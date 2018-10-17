@@ -6,12 +6,12 @@ using LocalDynamoDb.Builder.Docker;
 
 namespace LocalDynamoDb.Tests.Docker.Fixtures
 {
-    public class LocalDynamoFixture : IDisposable
+    public class DockerDynamoFixture : IDisposable
     {
         private readonly IDynamoInstance _dynamo;
         private AmazonDynamoDBClient _client;
 
-        public LocalDynamoFixture()
+        public DockerDynamoFixture()
         {
             var builder = new LocalDynamoDbBuilder().Container().UsingDefaultImage().ExposePort();
             _dynamo = builder.Build();
@@ -22,11 +22,8 @@ namespace LocalDynamoDb.Tests.Docker.Fixtures
         public AmazonDynamoDBClient Client
             => _client ?? (_client = _dynamo.CreateClient());
 
-        public Task<string> GetStateAsync()
-        {
-            var d = (IDockerDynamoInstance) _dynamo;
-            return d.GetStateAsync();
-        }
+        public Task<LocalDynamoDbState> GetStateAsync()
+            => _dynamo.GetStateAsync();
 
         public void Dispose()
         {

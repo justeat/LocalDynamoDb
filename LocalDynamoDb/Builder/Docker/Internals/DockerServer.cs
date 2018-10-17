@@ -21,7 +21,7 @@ namespace LocalDynamoDb.Builder.Docker.Internals
             ContainerName = containerName;
         }
 
-        public async Task<string> GetStateAsync(IDockerClient client)
+        public async Task<LocalDynamoDbState> GetStateAsync(IDockerClient client)
         {
             var list = await client.Containers.ListContainersAsync(new ContainersListParameters
             {
@@ -29,7 +29,7 @@ namespace LocalDynamoDb.Builder.Docker.Internals
             });
             
             var container = list.FirstOrDefault(x => x.Names.Contains("/" + ContainerName));
-            return container.State;
+            return container?.State == "running" ? LocalDynamoDbState.Running : LocalDynamoDbState.Stopped;
         }
 
         public async Task Start(IDockerClient client)

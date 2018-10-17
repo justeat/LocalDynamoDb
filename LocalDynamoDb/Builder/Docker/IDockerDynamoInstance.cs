@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace LocalDynamoDb.Builder.Docker
 {
     public interface IDockerDynamoInstance
@@ -11,7 +9,5 @@ namespace LocalDynamoDb.Builder.Docker
         string ImageName { get; }
         
         string Tag { get; }
-        
-        Task<string> GetStateAsync();
     }
 }

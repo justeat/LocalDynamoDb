@@ -10,20 +10,16 @@ using Amazon.Runtime;
 
 namespace LocalDynamoDb.Builder.JavaBinaries.Internals
 {
-    internal sealed class LocalDynamoJar
+    internal sealed class DynamoProcessHandler
     {
-        private readonly JarBinariesConfiguration _configuration;
-        private Process DynamoProcess { get; set; }
-        public AmazonDynamoDBClient Client { get; private set; }
+        private readonly Process _dynamoProcess;
 
-        public LocalDynamoJar(JarBinariesConfiguration configuration)
-        {            
-            DynamoProcess = Create(configuration.PortNumber);
-            
-            _configuration = configuration;
+        public DynamoProcessHandler(JarBinariesConfiguration configuration)
+        {
+            _dynamoProcess = CreateProcess(configuration.PortNumber, configuration.Path);
         }
 
-        private static Process Create(int portNumber)
+        private static Process CreateProcess(int portNumber, string path)
         {
             var processJar = new Process();
             var arguments = $"-Djava.library.path=.{Path.DirectorySeparatorChar}DynamoDBLocal_lib -jar DynamoDBLocal.jar curl -O https://bootstrap.pypa.io/get-pip.py -port {portNumber}";
@@ -32,6 +28,7 @@ namespace LocalDynamoDb.Builder.JavaBinaries.Internals
             processJar.StartInfo.Arguments = arguments;
 
             var rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            /*var relativePath = Path.DirectorySeparatorChar + "dynamodblocal";*/
             var relativePath = Path.DirectorySeparatorChar + "dynamodblocal";
             var osFriendlyAbsPath = Path.GetFullPath(rootFolder + relativePath).Replace('\\', Path.DirectorySeparatorChar);
             var jarFilePath = Path.Combine(osFriendlyAbsPath, "DynamoDBLocal.jar");
@@ -54,40 +51,34 @@ namespace LocalDynamoDb.Builder.JavaBinaries.Internals
             return processJar;
         }
 
-        public bool Start()
+        public Task<bool> Start()
         {
             Console.WriteLine("Starting in memory DynamoDb");
-            var success = DynamoProcess.Start();
+            var success = _dynamoProcess.Start();
             
             if (!success)
-            {
-                throw new Exception("Error starting dynamo: " + DynamoProcess.StandardError.ReadToEnd());
-            }
+                throw new Exception("Error starting dynamo: " + _dynamoProcess.StandardError.ReadToEnd());
 
-            return true;
+            return Task.FromResult(true);
         }
+
+        public bool IsResponding()
+            => _dynamoProcess.Responding;
 
         public Task Stop()
         {
             Console.WriteLine("Stopping in memory DynamoDb");
             try
             {
-                DynamoProcess.Kill();
+                _dynamoProcess.Kill();
             }
             catch (Win32Exception)
             {
-                Console.WriteLine(DynamoProcess.StandardError.ReadToEnd());
+                Console.WriteLine(_dynamoProcess.StandardError.ReadToEnd());
                 throw;
             }
 
             return Task.CompletedTask;
-        }
-
-        public AmazonDynamoDBClient CreateClient()
-        {
-            var config = new AmazonDynamoDBConfig { ServiceURL = FormattableString.Invariant($"http://localhost:{_configuration.PortNumber}")};
-            var credentials = new BasicAWSCredentials("A NIGHTINGALE HAS NO NEED FOR KEYS", "IT OPENS DOORS WITH ITS SONG");
-            return new AmazonDynamoDBClient(credentials, config);
         }
     }
 
