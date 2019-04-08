@@ -7,11 +7,13 @@
         <title>LocalDynamoDb</title>
         <Authors>Just Eat</Authors>
         <Company>Just Eat</Company>
+        <VersionPrefix>0.2.0.25</VersionPrefix>
         <PackageTags>aws;dynamodb</PackageTags>
         <RepositoryType>git</RepositoryType>
         <PackageIconUrl>https://avatars3.githubusercontent.com/u/1516790?s=200</PackageIconUrl>
         <Description>A wrapper to help with spinning up and tearing down a local instance of DynamoDb</Description>
         <PackageProjectUrl>https://github.com/justeat/LocalDynamoDb</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/justeat/LocalDynamoDb/LICENSE</PackageLicenseUrl>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
