@@ -12,6 +12,7 @@
         <PackageIconUrl>https://avatars3.githubusercontent.com/u/1516790?s=200</PackageIconUrl>
         <Description>A wrapper to help with spinning up and tearing down a local instance of DynamoDb</Description>
         <PackageProjectUrl>https://github.com/justeat/LocalDynamoDb</PackageProjectUrl>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
